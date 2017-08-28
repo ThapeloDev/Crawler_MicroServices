@@ -1419,17 +1419,19 @@
         .content-wrap
           .container.clearfix
             .row.clearfix
-              .col-lg-5
-                .heading-block.topmargin
-                  %h1
-                    Welcome to Canvas.
-                    %br>/
-                    MultiPurpose Template.
-                %p.lead Create a website that you are gonna be proud of. Be it Business, Portfolio, Agency, Photography, eCommerce &amp; much more.
-              .col-lg-7
-                .ohidden{"data-height-lg" => "426", "data-height-md" => "567", "data-height-sm" => "470", "data-height-xs" => "287", "data-height-xxs" => "183", :style => "position: relative; margin-bottom: -60px;"}
-                  %img{:alt => "Chrome", "data-animate" => "fadeInUp", "data-delay" => "100", :src => "/images/services/main-fbrowser.png", :style => "position: absolute; top: 0; left: 0;"}/
-                  %img{:alt => "iPad", "data-animate" => "fadeInUp", "data-delay" => "400", :src => "/images/services/main-fmobile.png", :style => "position: absolute; top: 0; left: 0;"}/
+              = react_component("HelloWorld", props: @hello_world_props, prerender: false)
+
+              -# .col-lg-5
+              -#   .heading-block.topmargin
+              -#     %h1
+              -#       Welcome to Canvas.
+              -#       %br>/
+              -#       MultiPurpose Template.
+              -#   %p.lead Create a website that you are gonna be proud of. Be it Business, Portfolio, Agency, Photography, eCommerce &amp; much more.
+              -# .col-lg-7
+              -#   .ohidden{"data-height-lg" => "426", "data-height-md" => "567", "data-height-sm" => "470", "data-height-xs" => "287", "data-height-xxs" => "183", :style => "position: relative; margin-bottom: -60px;"}
+              -#     %img{:alt => "Chrome", "data-animate" => "fadeInUp", "data-delay" => "100", :src => "/images/services/main-fbrowser.png", :style => "position: absolute; top: 0; left: 0;"}/
+              -#     %img{:alt => "iPad", "data-animate" => "fadeInUp", "data-delay" => "400", :src => "/images/services/main-fmobile.png", :style => "position: absolute; top: 0; left: 0;"}/
           .section.nobottommargin
             .container.clear-bottommargin.clearfix
               .row.topmargin-sm.clearfix

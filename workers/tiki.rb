@@ -1,20 +1,27 @@
-class FetchDataWorkers
-  include Sidekiq::Worker
+require 'rubygems'
+require 'mechanize'
+require 'open_uri_redirections'
 
-  def perform(name, count)
-    require 'rubygems'
-    require 'mechanize'
+class Tiki
+  # include Sidekiq::Worker
+
+  def self.do
+
     agent = Mechanize.new
-    host = ["http://kenh14.vn","http://gamek.vn","http://vnexpress.net","http://dantri.com.vn"]
+    agent.user_agent_alias = 'Mac Safari'
+    host = ["http://tiki.vn"]
+    # host = ["http://kenh14.vn","http://gamek.vn","http://vnexpress.net","http://dantri.com.vn"]
     host.each do |h|
       begin
         page = agent.get(h)
       rescue
         puts "Error #{$!}"
       end
+      binding.pry
 
       @docs = Nokogiri::HTML(page.body)
-      @content = @docs.css('a')
+      @content = @docs.css('img')
+      binding.pry
       @data = @content
       array = ['.html','.htm','.chn','http']
       @content.each_with_index do |i,c|

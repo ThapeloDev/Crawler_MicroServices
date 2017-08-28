@@ -24,5 +24,10 @@ test:
   <<: *default
   database: db/crawler_user_test
 production:
-  <<: *default
-  database: db/crawler_user_production
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+  encoding: unicode
+  host: 45.76.185.31
+  username: postgres
+  password: postgres

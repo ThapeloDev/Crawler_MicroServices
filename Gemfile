@@ -34,6 +34,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem "capistrano", "~> 3.9"
+  gem 'capistrano-rails', '~> 1.2'
+  gem 'capistrano-passenger', '~> 0.2.0'
+  gem 'capistrano-rvm'
 end
 
 #rails 5
@@ -69,4 +73,10 @@ gem 'mini_racer', platforms: :ruby
 gem 'bootstrap-sass', '~> 3.3.6'
 
 gem 'haml', '~> 4.0', '>= 4.0.7'
-
+#sidekiq
+gem 'sidekiq', '~> 4.2', '>= 4.2.10'
+gem 'mechanize', '~> 2.7', '>= 2.7.5'
+gem 'nokogiri', '~> 1.7'
+gem 'open_uri_redirections', '~> 0.2.1'
+gem 'watir', '~> 5.0'
+gem 'unicorn'
