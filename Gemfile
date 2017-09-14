@@ -47,7 +47,7 @@ gem 'pg', '~> 0.18.4'
 gem 'mongoid', '~> 6.1.0'
 
 #JS framework
-gem "react_on_rails", "~> 6"
+gem "react_on_rails", "~> 6.9"
 
 #server webpack
 gem 'webpack-rails', '~> 0.9.1'
