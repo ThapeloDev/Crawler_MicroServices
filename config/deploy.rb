@@ -33,7 +33,7 @@
 set :application, "crawler"
 set :repo_url, "git@github.com:vokythoai/Crawler_MicroServices.git"
 
-set :deploy_to, '/home/deploy/crawler'
+set :deploy_to, '/home/deploy/crawler/current'
 
 namespace :deploy do
 
