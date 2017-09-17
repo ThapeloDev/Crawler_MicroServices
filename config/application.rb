@@ -20,7 +20,7 @@ module App
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.assets.enabled = true  
-    config.assets.paths << "#{Rails.root}/app/assets/fonts"  
+    config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
     config.autoload_paths += %W(#{config.root}/workers)
     config.generators do |g|
       g.orm :mongoid
