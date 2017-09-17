@@ -28,6 +28,7 @@ production:
   pool: 5
   timeout: 5000
   encoding: unicode
-  host: 45.76.185.31
+  host: 45.32.120.179
   username: postgres
   password: postgres
+  database: crawler_prod
