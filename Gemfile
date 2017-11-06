@@ -33,6 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'pry', '~> 0.10.4'
   gem 'byebug'
   gem "capistrano", "~> 3.9"
   gem 'capistrano-rails', '~> 1.2'
@@ -80,3 +81,11 @@ gem 'nokogiri', '~> 1.7'
 gem 'open_uri_redirections', '~> 0.2.1'
 gem 'watir', '~> 5.0'
 gem 'unicorn'
+gem 'delayed_job', '~> 4.1', '>= 4.1.2'
+gem "paperclip", "~> 5.0.0"
+gem 'selenium-webdriver'
+gem 'capybara'
+gem 'selenium-client'
+gem 'cucumber-rails'
+gem 'geckodriver-helper'
+gem 'chromedriver-helper', '~> 1.0'

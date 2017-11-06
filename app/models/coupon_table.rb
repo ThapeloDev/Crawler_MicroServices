@@ -1,5 +1,5 @@
 class CouponTable < ActiveRecord::Base
-  include Mongoid::Document
+  # include Mongoid::Document
   field :title, type: String
   field :page, type: String
   field :percent_discount, type: String
@@ -8,7 +8,7 @@ class CouponTable < ActiveRecord::Base
   def solution(n, s)
     abc_col, defg_col, hjk_col = init_hash(n)
     data_after = fill_hash(s, abc_col, defg_col, hjk_col)
-    number = count(data_after)    
+    number = count(data_after)
   end
 
   def init_hash n
@@ -27,18 +27,18 @@ class CouponTable < ActiveRecord::Base
       hjk_col << {h: nil, j: nil, k: nil}
     end
 
-    [abc_col, defg_col, hjk_col]    
+    [abc_col, defg_col, hjk_col]
 
   end
 
   def fill_hash s, abc_col, defg_col=nil, hjk_col=nil
-    
+
     data_array = s.split(" ")
     [abc_col, defg_col, hjk_col].compact.each do |row|
       row.each_with_index do |value, index|
-        
+
         value.each do |k, v|
-          
+
           data_array_process = data_array.select{|i| i if i.to_i == index+1}
           data_array_process.each do |element|
             if element[1].downcase == k.to_s
@@ -109,4 +109,3 @@ class CouponTable < ActiveRecord::Base
 
   end
 end
-  

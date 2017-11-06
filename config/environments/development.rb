@@ -35,6 +35,14 @@ Rails.application.configure do
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
+  Capybara.run_server = false
+  Capybara.configure do |config|
+    config.run_server = false
+    config.default_driver = :selenium
+  end
+  Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, browser: :chrome)
+  end
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

@@ -19,12 +19,17 @@ module App
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-    config.assets.enabled = true  
+    config.assets.enabled = true
     config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/
     config.autoload_paths += %W(#{config.root}/workers)
-    config.generators do |g|
-      g.orm :mongoid
-    end
+    config.autoload_paths += %W(#{config.root}/workers/composite)
+    # config.autoload_paths += %W(#{config.root}/workers/composite/tree)
+    config.autoload_paths += %W(#{config.root}/workers/prototype)
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    # config.generators do |g|
+    #   g.orm :mongoid
+    # end
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
