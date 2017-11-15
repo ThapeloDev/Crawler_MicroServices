@@ -41,7 +41,7 @@ class Fptshop
     raw_datas.each do |raw_data|
       product_image_link = "https:" + raw_data.css(".fs-lpil-img img").first.attributes["data-original"].value.to_s.strip
       binding.pry
-      image_file = open("image.png", 'wb') { |file| file << open(product_image_link).read }
+      image_file = open("image.png", 'wb') { |file| file << open(URI.encode(product_image_link)).read }
 
       product_name = raw_data.css(".fs-lpil-name").first.text
 

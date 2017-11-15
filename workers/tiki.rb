@@ -17,7 +17,6 @@ class Tiki
       rescue
         puts "Error #{$!}"
       end
-      binding.pry
 
       @docs = Nokogiri::HTML(page.body)
       @content = @docs.css('img')
