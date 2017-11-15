@@ -4,7 +4,6 @@ require 'nokogiri'
 require 'capybara'
 require 'selenium'
 require 'capybara/dsl'
-
 class Thegioididong
   include Crawler::Crawler_Service
   include Capybara::DSL
@@ -28,6 +27,6 @@ class Thegioididong
 
   def fetch_data_from_html
     page_content = init_html
-    get_data_from_img(page_content)
+    get_data_from_img(page_content, "thegioididong")
   end
 end
