@@ -7,7 +7,7 @@ module Api
       end
 
       def show
-        render json: ProductMobileData.all
+        render json: ProductMobileData.all.limit(10)
       end
 
       def search
