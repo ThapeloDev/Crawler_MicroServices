@@ -14,7 +14,13 @@ default: &default
   password: postgres
 
 development:
-  <<: *default
+  adapter: postgresql
+  pool: 5
+  timeout: 5000
+  encoding: unicode
+  host: 45.32.120.179
+  username: postgres
+  password: postgres
   database: crawler_prod
 
 # Warning: The database defined as "test" will be erased and
