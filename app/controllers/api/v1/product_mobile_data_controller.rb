@@ -11,7 +11,9 @@ module Api
       end
 
       def search
-
+        search_string = "%" + params["search"].split("").join("%") + "%"
+        search_result = ProductMobileData.where("product_title ILIKE ?", search_string)
+        render json: search_result
       end
     end
   end
