@@ -40,8 +40,7 @@ class Fptshop
     raw_datas = content.css('.fs-lpil')
     raw_datas.each do |raw_data|
       product_image_link = "https:" + raw_data.css(".fs-lpil-img img").first.attributes["data-original"].value.to_s.strip
-      binding.pry
-      image_file = open("image.png", 'wb') { |file| file << open(URI.encode(product_image_link)).read }
+      # image_file = open("image.png", 'wb') { |file| file << open(URI.encode(product_image_link)).read }
 
       product_name = raw_data.css(".fs-lpil-name").first.text
 
@@ -50,13 +49,14 @@ class Fptshop
       new_product = ProductMobileData.create(
         product_title: product_name,
         price: product_price,
-        page_source: page_source
+        page_source: page_source,
+        image_link: product_image_link
       )
 
-      new_product_photo = ProductMobileImage.new
-      new_product_photo.photo = File.open(image_file)
-      new_product_photo.product_mobile_data = new_product
-      new_product_photo.save
+      # new_product_photo = ProductMobileImage.new
+      # new_product_photo.photo = File.open(image_file)
+      # new_product_photo.product_mobile_data = new_product
+      # new_product_photo.save
     end
   end
 end

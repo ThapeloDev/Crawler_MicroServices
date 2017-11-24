@@ -41,7 +41,7 @@ class Vienthonga
       rescue
         product_image_link = raw_data.css(".product-image img").first.attributes["src"].value
       end
-      image_file = open('image.png', 'wb') { |file| file << open(product_image_link).read }
+      # image_file = open('image.png', 'wb') { |file| file << open(product_image_link).read }
 
       product_name = raw_data.css(".product-name .name").first.children.to_s.delete("\n").strip
 
@@ -50,13 +50,15 @@ class Vienthonga
       new_product = ProductMobileData.create(
         product_title: product_name,
         price: product_price,
-        page_source: page_source
+        page_source: page_source,
+        image_link: product_image_link
       )
 
-      new_product_photo = ProductMobileImage.new
-      new_product_photo.photo = File.open(image_file)
-      new_product_photo.product_mobile_data = new_product
-      new_product_photo.save
+      # new_product_photo = ProductMobileImage.new
+      # new_product_photo.photo = File.open(image_file)
+      # new_product_photo.product_mobile_data = new_product
+      # new_product_photo.image_link = product_image_link
+      # new_product_photo.save
     end
   end
 end

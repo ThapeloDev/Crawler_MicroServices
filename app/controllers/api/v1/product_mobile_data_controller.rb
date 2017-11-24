@@ -7,7 +7,11 @@ module Api
       end
 
       def show
-        render json: ProductMobileData.find(params[:id])
+        render json: ProductMobileData.all
+      end
+
+      def search
+
       end
     end
   end
