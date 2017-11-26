@@ -11,14 +11,14 @@ module Api
       end
 
       def search
-        search_result = ProductMobileData.where("product_title ILIKE ?", custom_search_params(params)).group_by("page_source")
+        search_result = ProductMobileData.where("product_title ILIKE ?", custom_search_params(params)).group("id", "page_source")
         render json: search_result
       end
 
       def similar_product
         original_page_source = params["page_source"]
         similar_product_result = ProductMobileData
-                                .where("product_title ILIKE :search_params AND page_source != :page_source", { search_params: custom_search_params(params), page_source: original_page_source })
+                                .where("product_title ILIKE :search_params", { search_params: custom_search_params(params) })
                                 .where("created_at >= ?", Time.zone.now.beginning_of_day)
         render json: similar_product_result
       end
