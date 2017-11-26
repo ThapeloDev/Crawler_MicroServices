@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :product_mobile_data
       post 'product_mobile_data/search', to: "product_mobile_data#search"
+      post 'product_mobile_data/similar_product', to: "product_mobile_data#similar_product"
     end
   end
 
