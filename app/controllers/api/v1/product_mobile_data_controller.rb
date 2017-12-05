@@ -19,7 +19,6 @@ module Api
         original_page_source = params["page_source"]
         similar_product_result = ProductMobileData
                                 .where("product_title ILIKE :search_params", { search_params: custom_search_params(params) })
-                                .where("created_at >= ?", Time.zone.now.beginning_of_day)
         render json: similar_product_result
       end
 
