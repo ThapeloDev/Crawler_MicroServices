@@ -12,6 +12,10 @@ module Crawler::Crawler_Service
     raw_datas.each do |raw_data|
       next unless raw_data.attributes.keys.include?("data-original")
       product_image_link = raw_data.attributes["data-original"].value
+      if page_source == "thegioididong"
+        link = raw_data.parent.parent.parent.attributes["href"] || raw_data.parent.attributes["href"]
+        product_link = "https://www.thegioididong.com" + link.value.to_s.strip
+      end
       # image_file = open('image.png', 'wb') { |file| file << open(product_image_link).read }
 
       next if raw_data.next_element.nil?
@@ -23,7 +27,9 @@ module Crawler::Crawler_Service
         product_title: product_name,
         price: product_price,
         page_source: page_source,
-        image_link: product_image_link
+        image_link: product_image_link,
+        description: product_link,
+        full_name: product_name
       )
 
       # new_product_photo = ProductMobileImage.new
@@ -36,7 +42,7 @@ module Crawler::Crawler_Service
   def convert_special_character string, page_source
     @replacements =
       case page_source
-      when "thegioididong", "fptshop"
+      when "thegioididong", "fptshop", "tiki", "didongviet", "cellphone", "hoanghamobile"
          [ ["₫", ""], [".", ""] ]
       when "vienthonga"
         [ ["₫", ""], [",", ""] ]

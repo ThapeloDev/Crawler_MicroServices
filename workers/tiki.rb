@@ -1,89 +1,67 @@
 require 'rubygems'
 require 'mechanize'
-require 'open_uri_redirections'
+require 'nokogiri'
+require 'capybara'
+require 'selenium'
+require 'capybara/dsl'
+require 'open-uri'
+
 
 class Tiki
   # include Sidekiq::Worker
 
-  def self.do
+  include Crawler::Crawler_Service
+  include Capybara::DSL
+  def init_html
+    visit 'https://tiki.vn/dien-thoai-may-tinh-bang/c1789?src=mega-menu'
+    page.driver.browser.manage.window.maximize
+    page_content = Nokogiri::HTML(page.html)
 
-    agent = Mechanize.new
-    agent.user_agent_alias = 'Mac Safari'
-    host = ["http://tiki.vn"]
-    # host = ["http://kenh14.vn","http://gamek.vn","http://vnexpress.net","http://dantri.com.vn"]
-    host.each do |h|
-      begin
-        page = agent.get(h)
-      rescue
-        puts "Error #{$!}"
-      end
-
-      @docs = Nokogiri::HTML(page.body)
-      @content = @docs.css('img')
-      binding.pry
-      @data = @content
-      array = ['.html','.htm','.chn','http']
-      @content.each_with_index do |i,c|
-        title = i['title']
-        url = i['href']
-
-        if (title != nil) && array.any? {|word| url.to_s.include?(word)}
-          unless url.to_s.include? "http//e."
-            if (url.to_s.include? "http") == false
-              PostData.create(title: title.to_s,url: h + url.to_s)
-              fetch_data(h + url.to_s)
-            else
-              PostData.create(title: title.to_s,url: url.to_s)
-              fetch_data (url.to_s)
-            end
-          end
-        end
-      end
+    (1..17).each do |number|
+      visit "https://tiki.vn/dien-thoai-may-tinh-bang/c1789?src=mega-menu&page=#{number}"
+      get_data(page_content, "tiki")
     end
+    page.driver.browser.close
+    # @loadmore_exist = true
+    # while @loadmore_exist
+    #   sleep(2)
+    #   begin
+    #     load_more = page.find('#CategoryPager')
+    #   rescue
+    #     @loadmore_exist = false
+    #     next
+    #   end
+
+    #   page.execute_script "$('#CategoryPager').click();"
+    # end
+    # page_content = Nokogiri::HTML(page.html)
+    #
+    # page_content
   end
 
-  private
+  def get_data content, page_source
+    raw_datas = content.css('.product-item')
+    raw_datas.each do |raw_data|
+      next if raw_data.css("img").first.nil?
+      product_image_link = raw_data.css("img").first.attributes["src"].value.to_s.strip
+      product_link = raw_data.css("a").first.attributes["href"].value.to_s.strip
+      # image_file = open("image.png", 'wb') { |file| file << open(URI.encode(product_image_link)).read }
+      product_name = raw_data.attributes["data-title"].value.to_s.strip.gsub("Điện Thoại ","").gsub(" - Hàng Chính Hãng","").gsub(" DGW","").gsub(" - Hàng Nhập Khẩu","").gsub(" (Đã kích hoạt 1/12)","")
+      product_price = convert_special_character(raw_data.css(".price-sale").first.text.to_s.delete("\n").strip, page_source).to_i
 
-  def fetch_data url
-      require 'rubygems'
-      require 'mechanize'
-      agent = Mechanize.new
-      if (url.to_s.include? "https") == false
-        begin
-          page = agent.get(url)
-        rescue
-          puts "Error #{$!}"
-        end
+      new_product = ProductMobileData.create(
+        product_title: product_name,
+        price: product_price,
+        page_source: page_source,
+        image_link: product_image_link,
+        description: product_link,
+        full_name: raw_data.attributes["data-title"].value.to_s.strip
+      )
 
-
-        @docs = Nokogiri::HTML(page.body)
-        @content = @docs.css('a')
-        insert_data @content,url
-      end
-
+      # new_product_photo = ProductMobileImage.new
+      # new_product_photo.photo = File.open(image_file)
+      # new_product_photo.product_mobile_data = new_product
+      # new_product_photo.save
     end
-
-    def insert_data content , host
-     array = ['.html','.htm','.chn','http']
-      content.each_with_index do |i,c|
-        title = i['title']
-        url = i['href']
-
-        if (title != nil) && array.any? {|word| url.to_s.include?(word)}
-          unless url.to_s.include? "http//e."
-            if (url.to_s.include? "http") == false
-              root = host.split("/")[2]
-
-
-                PostData.create(title: title.to_s,url: "http://"+root.to_s + url.to_s)
-
-            else
-              PostData.create(title: title.to_s,url: url.to_s)
-
-            end
-          end
-        end
-      end
-    end
-
+  end
 end

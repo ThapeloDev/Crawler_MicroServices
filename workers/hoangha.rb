@@ -6,17 +6,16 @@ require 'selenium'
 require 'capybara/dsl'
 require 'open-uri'
 
-class Fptshop
+class Hoangha
   include Crawler::Crawler_Service
   include Capybara::DSL
   def init_html
-    visit 'https://fptshop.com.vn/dien-thoai?sort=gia-cao-den-thap'
+    visit 'https://hoanghamobile.com/dien-thoai-di-dong-c14.html'
     page.driver.browser.manage.window.maximize
     page_content = Nokogiri::HTML(page.html)
-    number_page = page_content.css(".f-cmtpaging .f-cmtpg-l").last.attributes["data-page"].value.to_i
-    (1..number_page).each do |number|
-    	visit "https://fptshop.com.vn/dien-thoai?sort=gia-cao-den-thap&trang=#{number}"
-    	get_data(page_content, "fptshop")
+    (1..15).each do |number|
+      visit "https://hoanghamobile.com/dien-thoai-di-dong-c14.html?sort=11&p=#{number}"
+      get_data(page_content, "hoanghamobile")
     end
     page.driver.browser.close
     # @loadmore_exist = true
@@ -37,18 +36,17 @@ class Fptshop
   end
 
   def get_data content, page_source
-    raw_datas = content.css('.fs-lpil')
+    raw_datas = content.css('.list-item')
     raw_datas.each do |raw_data|
-      product_image_link = "https:" + raw_data.css(".fs-lpil-img img").first.attributes["data-original"].value.to_s.strip
-      product_link = "https://fptshop.com.vn" + raw_data.css(".fs-lpil-img").first.attributes["href"].value.to_s.strip
+      product_image_link = raw_data.css(".mosaic-backdrop img").first.attributes["src"].value.to_s.strip
+      product_link = raw_data.css(".mosaic-block a").first.attributes["href"].value.to_s.strip
       # image_file = open("image.png", 'wb') { |file| file << open(URI.encode(product_image_link)).read }
 
-      product_name = raw_data.css(".fs-lpil-name").first.text
+      product_name = raw_data.css(".product-name a").first.text
 
-      product_price = convert_special_character(raw_data.css(".fs-lpil-price").text.to_s.delete("\n").strip, page_source).to_i
-
+      product_price = convert_special_character(raw_data.css(".product-price").text.to_s.delete("\n").strip, page_source).to_i
       new_product = ProductMobileData.create(
-        product_title: product_name,
+        product_title: product_name.split(" ").drop(1).join(" ").gsub(" - Chính Hãng","").gsub(" - Chính hãng","").gsub(" - Digiworld ( Rom Tiếng Việt Gốc )","").gsub(" - CPO ( Certified Pre-Owned)","").gsub(" - Chống nước",""),
         price: product_price,
         page_source: page_source,
         image_link: product_image_link,

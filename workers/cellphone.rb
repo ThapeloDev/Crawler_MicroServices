@@ -6,17 +6,16 @@ require 'selenium'
 require 'capybara/dsl'
 require 'open-uri'
 
-class Fptshop
+class Cellphone
   include Crawler::Crawler_Service
   include Capybara::DSL
   def init_html
-    visit 'https://fptshop.com.vn/dien-thoai?sort=gia-cao-den-thap'
+    visit 'https://cellphones.com.vn/mobile.html'
     page.driver.browser.manage.window.maximize
     page_content = Nokogiri::HTML(page.html)
-    number_page = page_content.css(".f-cmtpaging .f-cmtpg-l").last.attributes["data-page"].value.to_i
-    (1..number_page).each do |number|
-    	visit "https://fptshop.com.vn/dien-thoai?sort=gia-cao-den-thap&trang=#{number}"
-    	get_data(page_content, "fptshop")
+    (1..14).each do |number|
+      visit "https://cellphones.com.vn/mobile.html?p=#{number}"
+      get_data(page_content, "cellphone")
     end
     page.driver.browser.close
     # @loadmore_exist = true
@@ -37,18 +36,19 @@ class Fptshop
   end
 
   def get_data content, page_source
-    raw_datas = content.css('.fs-lpil')
+    raw_datas = content.css('.cols-5 li')
     raw_datas.each do |raw_data|
-      product_image_link = "https:" + raw_data.css(".fs-lpil-img img").first.attributes["data-original"].value.to_s.strip
-      product_link = "https://fptshop.com.vn" + raw_data.css(".fs-lpil-img").first.attributes["href"].value.to_s.strip
+      next if raw_data.css(".lt-product-group-image img").first.nil?
+      product_image_link = raw_data.css(".lt-product-group-image img").first.attributes["src"].value.to_s.strip
+      product_link = raw_data.css("a").first.attributes["href"].value.to_s.strip
       # image_file = open("image.png", 'wb') { |file| file << open(URI.encode(product_image_link)).read }
 
-      product_name = raw_data.css(".fs-lpil-name").first.text
+      product_name = raw_data.css(".lt-product-group-info h3").first.text
 
-      product_price = convert_special_character(raw_data.css(".fs-lpil-price").text.to_s.delete("\n").strip, page_source).to_i
+      product_price = convert_special_character(raw_data.css(".price").text.to_s.delete("\n").strip, page_source).to_i
 
       new_product = ProductMobileData.create(
-        product_title: product_name,
+        product_title: product_name.split(" ").drop(1).join(" ").gsub(" Chính hãng",""),
         price: product_price,
         page_source: page_source,
         image_link: product_image_link,
