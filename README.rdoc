@@ -10,6 +10,8 @@ Technical:
 
 - Selenium web driver for web crawler
 
+- Nokogiri for parsing HTML DOM/ HTML node
+
 - Postgresql
 
 - JSON API
